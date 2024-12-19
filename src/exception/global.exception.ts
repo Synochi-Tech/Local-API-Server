@@ -7,6 +7,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
   catch(exception: any, host: ArgumentsHost) {
     const context = host.switchToHttp();
     const response = context.getResponse();
+    const request = context.getRequest();
 
     const isProduction = this.configService.get('NODE_ENV') === 'production' ? true: false
 

@@ -3,10 +3,11 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmConfigService } from './shared/typeorm/typeorm.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { GlobalExceptionFilter } from './exception/global.exception';
 import { GlobalResponse } from './interceptors/response.interceptors';
 import { JwtModule } from '@nestjs/jwt';
+import { TodosModule } from './todos/todos.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -24,6 +25,7 @@ import { JwtModule } from '@nestjs/jwt';
         return dataSource;
       },
     }),
+    TodosModule,
   ],
   controllers: [],
   providers: [

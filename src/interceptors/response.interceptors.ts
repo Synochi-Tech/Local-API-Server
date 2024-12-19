@@ -12,9 +12,9 @@ export class GlobalResponse implements NestInterceptor {
     return next.handle().pipe(
       map((response) => {
         return {
-          status: response.status,
-          message: response.message,
-          data: response.data,
+          status: response.status || 1,
+          message: response.message || '',
+          data: response.data || {},
           error : null
         };
       }),
