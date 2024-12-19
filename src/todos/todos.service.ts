@@ -32,13 +32,13 @@ export class TodosService {
       {
         id,
       },
-      updateTodoDto,
+      { ...updateTodoDto, updated_at: new Date() },
     );
   }
 
   async remove(id: string) {
     return await this.todoRepo.delete({
-      id
+      id,
     });
   }
 }
