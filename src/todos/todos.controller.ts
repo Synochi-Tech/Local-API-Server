@@ -33,17 +33,24 @@ export class TodosController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.todosService.findOne(id);
+  async findOne(@Param() params: TodoParam) {
+    const result = await this.todosService.findOne(params.id);
+    return {
+      message: `Todo Fetched for ${params.id}`,
+      data: result,
+    };
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateTodoDto: UpdateTodoDto) {
-    const result = await this.todosService.update(id, updateTodoDto);
+  async update(
+    @Param() params: TodoParam,
+    @Body() updateTodoDto: UpdateTodoDto,
+  ) {
+    const result = await this.todosService.update(params.id, updateTodoDto);
     return {
       message: 'Todo Updated',
-      data: result
-    }
+      data: result,
+    };
   }
 
   @Delete(':id')
@@ -51,7 +58,7 @@ export class TodosController {
     const result = await this.todosService.remove(params.id);
     return {
       data: result,
-      message: `Todo with id ${params.id} is deleted`
-    }
+      message: `Todo with id ${params.id} is deleted`,
+    };
   }
 }
