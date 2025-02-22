@@ -38,6 +38,7 @@ export class UsersService {
   }
 
   async myProfile() {
+    const users = this.request.user.guid;
     return await this.userRepo.findOne({
       where: {
         guid: this.request.user.guid

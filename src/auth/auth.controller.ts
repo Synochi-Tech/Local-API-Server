@@ -23,7 +23,7 @@ export class AuthController {
       data: response,
     };
   }
-  @Post('login')
+  @Post('signin')
   @Public()
   async login(@Body() body: LoginUserDto) {
     const response = await this.authService.login(body);
