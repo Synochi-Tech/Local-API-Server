@@ -1,11 +1,10 @@
 import {
   Controller,
   Get,
-  Post,
   Body,
-  Patch,
   Param,
   Delete,
+  Put,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -40,7 +39,7 @@ export class UsersController {
     };
   }
 
-  @Patch()
+  @Put('profile')
   async update(@Body() updateUserDto: UpdateUserDto) {
     const response = await this.usersService.update(updateUserDto);
     return {
