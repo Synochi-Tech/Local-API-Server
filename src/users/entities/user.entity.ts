@@ -1,11 +1,9 @@
-import {
-  Column,
-  Entity,
-  OneToMany,
-} from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 import { UserRoles } from './userRole.entity';
 import { Order } from '../order/entities/order.entity';
 import { UserAddress } from '../address/entities/userAddress.entity';
+import { UserTodos } from '../../todos/entities/userTodos.entity';
+import { Todos } from 'src/todos/entities/todo.entity';
 
 @Entity('users')
 export class User {
@@ -72,7 +70,9 @@ export class User {
   @OneToMany(() => Order, (order) => order.user)
   userOrders: Order[];
 
-  @OneToMany(() => UserAddress, address => address.user)
-  userAddress: UserAddress[]
+  @OneToMany(() => UserTodos, (todo) => todo.user)
+  todos: UserTodos[];
 
+  @OneToMany(() => UserAddress, (address) => address.user)
+  userAddress: UserAddress[];
 }

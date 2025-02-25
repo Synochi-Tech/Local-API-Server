@@ -1,18 +1,41 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CreateTodoDto, TodoParam } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { Todos } from './entities/todo.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { v4 as uuid } from 'uuid';
+import { UserTodos } from './entities/userTodos.entity';
+import { REQUEST } from '@nestjs/core';
+import { IRequest } from 'src/app.interface';
 
 @Injectable()
 export class TodosService {
   constructor(
+    @Inject(REQUEST)
+    private request: IRequest,
+
     @InjectRepository(Todos)
     private todoRepo: Repository<Todos>,
+
+    @InjectRepository(UserTodos)
+    private userTodosRepo: Repository<UserTodos>,
   ) {}
-  create(createTodoDto: CreateTodoDto) {
-    return this.todoRepo.save(createTodoDto);
+  async create(createTodoDto: CreateTodoDto) {
+    const todoId = uuid();
+    const createdTodo = this.todoRepo.create({
+      id: todoId,
+      title: createTodoDto.title,
+      isCompleted: createTodoDto.isCompleted,
+    });
+    const userTodo = this.userTodosRepo.create({
+      user: { guid: this.request.user.guid },
+      todos: todoId,
+    });
+    return Promise.all([
+      this.todoRepo.save(createdTodo),
+      this.userTodosRepo.save(userTodo),
+    ]);
   }
 
   async findAll() {
@@ -23,6 +46,20 @@ export class TodosService {
     return this.todoRepo.findOne({
       where: {
         id,
+      },
+      relations: ['todos','todos.user'],
+      select: {
+        id: true,
+        title: true,
+        isCompleted: true,
+        created_at: true,
+        todos: {
+          user: {
+            guid: true,
+            first_name: true,
+            last_name: true,
+          },
+        },
       },
     });
   }
