@@ -24,7 +24,7 @@ export class UserTodos {
   @Index()
   user: User;
 
-  @ManyToOne(() => Todos, (todo) => todo.todos)
+  @ManyToOne(() => Todos, (todo) => todo.users)
   @JoinColumn({
     name: 'todo_id',
     referencedColumnName: 'id',

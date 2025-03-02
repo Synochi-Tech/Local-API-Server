@@ -40,6 +40,8 @@ export class AuthService {
       password: hashPassword,
       created_by: userGuid,
       username: properties.username,
+      first_name: properties.first_name,
+      last_name: properties.last_name,
     });
 
     await this.userRepo.save(user);

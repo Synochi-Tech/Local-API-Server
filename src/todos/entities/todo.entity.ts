@@ -1,5 +1,5 @@
 import { UserTodos } from 'src/todos/entities/userTodos.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('todos')
 export class Todos {
@@ -26,6 +26,6 @@ export class Todos {
   })
   updated_at: Date;
 
-  @OneToMany(() => UserTodos, (todo) => todo.todos)
-  todos: UserTodos[];
+  @OneToOne(() => UserTodos, (todo) => todo.todos)
+  users: UserTodos;
 }

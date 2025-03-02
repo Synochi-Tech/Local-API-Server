@@ -39,7 +39,24 @@ export class TodosService {
   }
 
   async findAll() {
-    return await this.todoRepo.find();
+    const result = await this.todoRepo.find({
+      relations: ['users', 'users.user'],
+      select: {
+        id: true,
+        title: true,
+        isCompleted: true,
+        created_at: true,
+        users: {
+          id: true, // how we can add alias for this id key 
+          user: {
+            first_name: true,
+            last_name: true,
+            username: true,
+          },
+        },
+      },
+    });
+    return result;
   }
 
   findOne(id: string) {
@@ -47,15 +64,14 @@ export class TodosService {
       where: {
         id,
       },
-      relations: ['todos','todos.user'],
+      relations: ['users', 'users.user'],
       select: {
         id: true,
         title: true,
         isCompleted: true,
         created_at: true,
-        todos: {
+        users: {
           user: {
-            guid: true,
             first_name: true,
             last_name: true,
           },
