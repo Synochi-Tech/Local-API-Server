@@ -13,12 +13,12 @@ export class UsersService {
     private userRepo: Repository<User>,
 
     @Inject(REQUEST)
-    private request: IRequest
+    private request: IRequest,
   ) {}
 
   async findAll() {
     return await this.userRepo.find({
-      relations:['roles','roles.role'],
+      relations: ['roles', 'roles.role'],
       select: {
         guid: true,
         first_name: true,
@@ -30,47 +30,48 @@ export class UsersService {
         roles: {
           role_id: true,
           role: {
-            role: true
-          }
-        }
-      }
-    })
+            role: true,
+          },
+        },
+      },
+    });
   }
 
   async myProfile() {
-    return await this.userRepo.findOne({
-      where: {
-        guid: this.request.user.guid
-      },
-      relations: ['roles','roles.role'],
-      select:{
-        guid: true,
-        email: true,
-        first_name: true,
-        last_name: true,
-        roles: {
-          role_id: true,
-          role: {
-            role: true
-          }
-        }
-      }
-    })
+    const user = await this.userRepo
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.roles', 'userRoles')
+      .leftJoinAndSelect('userRoles.role', 'role')
+      .where('user.guid = :guid', { guid: this.request.user.guid })
+      .getOne();
+    if (user) {
+      return {
+        guid: user.guid,
+        email: user.email,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        roles: user.roles.map((userRole) => ({
+          role_id: userRole.role_id,
+          role: userRole.role?.role, // Get the role name
+        })),
+      };
+    }
   }
 
   async update(body: UpdateUserDto) {
     const updatedUser = {
       first_name: body.firstName,
-      last_name: body.lastName
-    }
-    return await this.userRepo.update({
-      guid: this.request.user.guid
-    },updatedUser)
+      last_name: body.lastName,
+    };
+    return await this.userRepo.update(
+      {
+        guid: this.request.user.guid,
+      },
+      updatedUser,
+    );
   }
 
   async remove(id: string) {
     return await this.userRepo.delete({ guid: id });
   }
-
-  
 }

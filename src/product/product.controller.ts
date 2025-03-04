@@ -26,7 +26,7 @@ export class ProductController {
   }
 
   @Post()
-  @Roles(Role.Artist, Role.Admin)
+  @Roles(Role.Admin)
   async addProduct(@Body() body: CreateProductDTO) {
     const response = await this.productService.addProduct(body);
     return {

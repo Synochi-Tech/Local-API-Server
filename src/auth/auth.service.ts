@@ -56,16 +56,6 @@ export class AuthService {
       }),
     );
 
-    if (properties.isArtist) {
-      userRoles.push(
-        this.userRolesRepo.create({
-          role_id: ROLE_ID.ARTIST,
-          user_guid: user.guid,
-          created_by: user.guid,
-        }),
-      );
-    }
-
     await this.userRolesRepo.save(userRoles);
 
     return {

@@ -31,11 +31,6 @@ export class CreateUserDto {
   password: string;
 
   @ApiProperty()
-  @IsBoolean()
-  @IsOptional()
-  isArtist: boolean = false;
-
-  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   first_name: string;

@@ -17,7 +17,8 @@ export class TypeOrmConfigService {
       logging: this.config.get('ALLOW_LOGGING'),
       entities: [],
       autoLoadEntities: true,
-      synchronize: this.config.get('DB_SYNC')
+      synchronize: this.config.get('DB_SYNC'),
+      debug: false,
     };
   }
 }
