@@ -19,7 +19,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  @Roles(Role.SuperAdmin)
+  @Roles(Role.Admin)
   async findAll() {
     const data = await this.usersService.findAll();
     return {
@@ -49,7 +49,7 @@ export class UsersController {
   }
 
   @Delete(':guid')
-  @Roles(Role.SuperAdmin)
+  @Roles(Role.Admin)
   remove(@Param('guid') guid: string) {
     return this.usersService.remove(guid);
   }

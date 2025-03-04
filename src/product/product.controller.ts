@@ -70,7 +70,7 @@ export class ProductController {
   }
 
   @Post('category/create')
-  @Roles(Role.Admin, Role.SuperAdmin)
+  @Roles(Role.Admin)
   async createCategory(@Body() body: CreateCategoryDTO) {
     const response = await this.productService.createCategory(body.category);
     return {
