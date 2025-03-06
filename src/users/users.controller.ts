@@ -5,12 +5,14 @@ import {
   Param,
   Delete,
   Put,
+  Post,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/decorator/role.decorator';
 import { Role } from 'src/enums/role.enum';
+import { AddUserDto } from './dto/add-user.dto';
 
 @ApiTags('Users')
 @ApiBearerAuth()
@@ -22,6 +24,20 @@ export class UsersController {
   @Roles(Role.Admin)
   async findAll() {
     const data = await this.usersService.findAll();
+    return {
+      status: 1,
+      message: 'User created successfully',
+      data,
+    };
+  }
+  @Post('/add')
+  @Roles(Role.Admin)
+  async addUser(@Body() userDetails: AddUserDto) {
+    const data = await this.usersService.createUser(
+      userDetails,
+      userDetails.roles,
+      true,
+    );
     return {
       status: 1,
       message: 'User created successfully',

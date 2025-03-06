@@ -29,39 +29,6 @@ export class AuthService {
     private configService: ConfigService,
   ) {}
 
-  async signup(properties: CreateUserDto) {
-    const hashPassword = await bcrypt.hash(properties.password, 10);
-    const userGuid = uuidv4();
-
-    const user = this.userRepo.create({
-      guid: userGuid,
-      email: properties.email,
-      mobile: properties.mobile,
-      password: hashPassword,
-      created_by: userGuid,
-      username: properties.username,
-      first_name: properties.first_name,
-      last_name: properties.last_name,
-    });
-
-    await this.userRepo.save(user);
-
-    const userRoles = [];
-
-    userRoles.push(
-      this.userRolesRepo.create({
-        role_id: ROLE_ID.USER,
-        user_guid: user.guid,
-        created_by: user.guid,
-      }),
-    );
-
-    await this.userRolesRepo.save(userRoles);
-
-    return {
-      success: 1,
-    };
-  }
   async login(body: LoginUserDto) {
     // find user
     const user = await this.userRepo.findOne({
