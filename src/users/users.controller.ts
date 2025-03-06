@@ -20,31 +20,6 @@ import { AddUserDto } from './dto/add-user.dto';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Get()
-  @Roles(Role.Admin)
-  async findAll() {
-    const data = await this.usersService.findAll();
-    return {
-      status: 1,
-      message: 'User created successfully',
-      data,
-    };
-  }
-  @Post('/add')
-  @Roles(Role.Admin)
-  async addUser(@Body() userDetails: AddUserDto) {
-    const data = await this.usersService.createUser(
-      userDetails,
-      userDetails.roles,
-      true,
-    );
-    return {
-      status: 1,
-      message: 'User created successfully',
-      data,
-    };
-  }
-
   @Get('profile')
   async myProfile() {
     const data = await this.usersService.myProfile();
@@ -68,5 +43,42 @@ export class UsersController {
   @Roles(Role.Admin)
   remove(@Param('guid') guid: string) {
     return this.usersService.remove(guid);
+  }
+
+  @Get()
+  @Roles(Role.Admin)
+  async findAll() {
+    const data = await this.usersService.findAll();
+    return {
+      status: 1,
+      message: 'All users',
+      data,
+    };
+  }
+
+  @Post('/add')
+  @Roles(Role.Admin)
+  async addUser(@Body() userDetails: AddUserDto) {
+    const data = await this.usersService.createUser(
+      userDetails,
+      userDetails.roles,
+      true,
+    );
+    return {
+      status: 1,
+      message: 'User created successfully',
+      data,
+    };
+  }
+
+  @Get('roles')
+  @Roles(Role.Admin)
+  async getRolls() {
+    const data = await this.usersService.getRoles();
+    return {
+      status: 1,
+      message: 'all roles',
+      data,
+    };
   }
 }

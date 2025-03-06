@@ -11,6 +11,7 @@ import { CreateUserDto } from 'src/auth/dto/create-user.dto';
 import { UserRoles } from './entities/userRole.entity';
 import { AddUserDto } from './dto/add-user.dto';
 import { ICreateUser } from './users.interface';
+import { Role } from './entities/role.entitiy';
 
 @Injectable()
 export class UsersService {
@@ -20,6 +21,9 @@ export class UsersService {
 
     @InjectRepository(UserRoles)
     private userRolesRepo: Repository<UserRoles>,
+
+    @InjectRepository(Role)
+    private roleRepo: Repository<Role>,
 
     @Inject(REQUEST)
     private request: IRequest,
@@ -103,7 +107,7 @@ export class UsersService {
       mobile: properties.mobile,
       password: hashPassword,
       created_by: userGuid,
-      username: properties.username, 
+      username: properties.username,
       first_name: properties.first_name,
       last_name: properties.last_name,
     });
@@ -131,5 +135,9 @@ export class UsersService {
       response.password = userPassword;
     }
     return response;
+  }
+
+  async getRoles() {
+    return this.roleRepo.find();
   }
 }
