@@ -6,7 +6,7 @@ import { Todos } from './entities/todo.entity';
 import { UserTodos } from './entities/userTodos.entity';
 import { User } from 'src/users/entities/user.entity';
 @Module({
-  imports: [TypeOrmModule.forFeature([Todos,UserTodos])],
+  imports: [TypeOrmModule.forFeature([Todos,UserTodos,User])],
   controllers: [TodosController],
   providers: [TodosService],
 })

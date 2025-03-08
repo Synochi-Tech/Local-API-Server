@@ -10,6 +10,9 @@ import {
 import { TodosService } from './todos.service';
 import { CreateTodoDto, TodoParam } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
+import { AssignTodoDto } from './dto/assign-todo-dto';
+import { Roles } from 'src/decorator/role.decorator';
+import { Role } from 'src/enums/role.enum';
 
 @Controller('todos')
 export class TodosController {
@@ -60,5 +63,15 @@ export class TodosController {
       data: result,
       message: `Todo with id ${params.id} is deleted`,
     };
+  }
+
+  @Patch('assign-user/:id')
+  @Roles(Role.Admin)
+  async assignTodo(@Param() params: TodoParam, @Body() body: AssignTodoDto) {
+    const result = this.todosService.assignUser(params.id, body.userId);
+    return {
+      data: result,
+      message: 'User assigned successfully'
+    }
   }
 }

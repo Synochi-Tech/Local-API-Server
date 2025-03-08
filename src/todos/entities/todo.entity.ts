@@ -1,5 +1,11 @@
 import { UserTodos } from 'src/todos/entities/userTodos.entity';
-import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('todos')
 export class Todos {
@@ -25,6 +31,12 @@ export class Todos {
     nullable: true,
   })
   updated_at: Date;
+
+  @Column({
+    type: 'uuid',
+    nullable: true,
+  })
+  updated_by: Date;
 
   @OneToOne(() => UserTodos, (todo) => todo.todos)
   users: UserTodos;
